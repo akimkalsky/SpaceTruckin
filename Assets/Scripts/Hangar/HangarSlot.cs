@@ -9,9 +9,6 @@ public class HangarSlot : MonoBehaviour
 
     public void LaunchShip()
     {
-        if (shipInstance != null)
-        {
-            shipInstance.Launch();
-        }
+        shipInstance.Launch();
     }
 }

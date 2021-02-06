@@ -30,13 +30,13 @@ public class MissionsUI : MonoBehaviour
             if (ship != null)
             {
                 slot.ship = ship;
-                if(ship.CurrentMission == null)
+                if(ship.currentMission == null)
                 {
                     slot.IsActive = true;
                 }
                 else
                 {
-                    slot.IsActive = !ship.CurrentMission.IsInProgress();
+                    slot.IsActive = !ship.currentMission.IsInProgress();
                 }
             }
             else
@@ -75,7 +75,7 @@ public class MissionsUI : MonoBehaviour
         List<Mission> scheduledMissions = MissionsManager.GetScheduledMissions();
         foreach(MissionScheduleSlot slot in missionSlots)
         {
-            Mission missionForSlot = scheduledMissions.Where(x => x.Ship == slot.ship).FirstOrDefault();
+            Mission missionForSlot = scheduledMissions.Where(x => x.ship == slot.ship).FirstOrDefault();
 
             if(missionForSlot != null)
             {
@@ -93,10 +93,9 @@ public class MissionsUI : MonoBehaviour
 
     private void ShowMissionProgress(MissionUIItem missionItem)
     {
-        string substring = missionItem.mission.DaysLeftToComplete > 1 ? "days" : "day";
-        
-        missionItem.missionNameText.text = missionItem.mission.Name 
-            + $"\n({missionItem.mission.DaysLeftToComplete} {substring} remaining)";
+        string substring = missionItem.mission.daysLeftToComplete > 1 ? "days" : "day";
+        missionItem.missionNameText.text = 
+            missionItem.mission.missionName + $"\n({missionItem.mission.daysLeftToComplete} {substring} remaining)";
     }
 
     public MissionScheduleSlot GetSlotForMissionDrag(Vector2 position)

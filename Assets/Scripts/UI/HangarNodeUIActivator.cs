@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class HangarNodeUIActivator : MonoBehaviour
 {
@@ -7,7 +9,7 @@ public class HangarNodeUIActivator : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Ship shipForNode = ShipsManager.GetShipForNode(hangarNode);
-        if(shipForNode != null && !shipForNode.IsLaunched)
+        if(shipForNode != null && !shipForNode.isLaunched)
         {
             UIManager.SetCanInteractHangarNode(hangarNode, true);
         }

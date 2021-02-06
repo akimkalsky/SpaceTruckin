@@ -5,49 +5,40 @@ public class MessageDetailView : MonoBehaviour
 {
     public Text messageSubjectText;
     public Text messageSenderText;
-    public GameObject messageBodyPrefab;
-    public GameObject messageBodyScrollViewContent;
-    
+    public Text messageBodyText;
     public Button missionAcceptButton;
     public MissionDetailsUI missionDetailsUI;
 
     public void SetMessageDetails(Message message)
     {
-        messageSubjectText.text = message.Subject;
-        messageSenderText.text = message.Sender;
+        messageSubjectText.text = message.subject;
+        messageSenderText.text = message.sender;
 
-        GameObject messageBody = Instantiate(messageBodyPrefab, messageBodyScrollViewContent.transform);
-        RectTransform rectTransform = messageBody.GetComponent<RectTransform>();
-        rectTransform.Reset();
-        rectTransform.Stretch();
-
-        Text messageBodyText = messageBody.GetComponent<Text>();
-        messageBodyText.text = message.body;
-        if (string.IsNullOrEmpty(messageBodyText.text))
+        if (string.IsNullOrEmpty(message.body))
         {
-            messageBodyText.text = PlaceholderUtils.GenerateLoremIpsum(16);
+            messageBodyText.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tortor dui, elementum eu convallis non, cursus ac dolor. Quisque dictum est quam, et pellentesque velit rutrum eget. Nullam interdum ultricies velit pharetra aliquet. Integer sodales a magna quis ornare. Ut vulputate nibh ipsum. Vivamus tincidunt nec nisi in fermentum. Mauris consequat mi vel odio consequat, eget gravida urna lobortis. Pellentesque eu ipsum consectetur, pharetra nulla in, consectetur turpis. Curabitur ornare eu nisi tempus varius. Phasellus vel ex mauris. Fusce fermentum mi id elementum gravida.";
 
         }
         messageBodyText.text = messageBodyText.text.InsertNewLines();
 
-        if (message.Mission != null)
+        if (message.mission != null)
         {
             messageBodyText.text += "\n\nI've got a mission for you. See the details below:";
-            messageBodyText.text += "\n\n" + missionDetailsUI.BuildDetailsString(message.Mission);
+            messageBodyText.text += "\n\n" + missionDetailsUI.BuildDetailsString(message.mission);
         }
     }
 
     public void SetMissionAcceptButton(Mission mission)
     {
         Text buttonText = missionAcceptButton.GetComponentInChildren<Text>();
-        buttonText.text = "Accept " + mission.Name;
+        buttonText.text = "Accept " + mission.missionName;
 
-        missionAcceptButton.interactable = !mission.HasBeenAccepted;
+        missionAcceptButton.interactable = !mission.hasBeenAccepted;
         missionAcceptButton.AddOnClick(() =>
         {
             buttonText.text = "Mission Accepted!";
             missionAcceptButton.interactable = false;
-            mission.HasBeenAccepted = true;
+            mission.hasBeenAccepted = true;
         });
     }
 }

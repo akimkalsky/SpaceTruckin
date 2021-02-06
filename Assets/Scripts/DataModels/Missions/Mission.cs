@@ -1,79 +1,52 @@
-﻿using System;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
+
+public enum MissionSource
+{
+    Noticeboard = 1, Email = 2, Npc = 3
+}
 
 [CreateAssetMenu(fileName = "Mission", menuName = "ScriptableObjects/Mission", order = 1)]
-public partial class Mission : ScriptableObject, IDataModel
+public class Mission : ScriptableObject
 {
     [Header("Set in Editor")]
-    [SerializeField] private int missionDurationInDays;
-    [SerializeField] private string missionName, customer, cargo, description;
-    [SerializeField] private int fuelCost, reward, moneyNeededToUnlock; // may need to be longs later
-    [SerializeField] private MissionOutcome[] outcomes;
-    [SerializeField] private ThankYouMessage thankYouMessage;
+    public int missionDurationInDays;
+    public string missionName;
+    public string customer;
+    public string cargo;
+    public string description;
+    public int fuelCost;
+    public int reward;
+    public int moneyNeededToUnlock;
+    [SerializeField]
+    public MissionOutcome[] outcomes;
 
-    [Header("Data to update IN GAME")] 
-    public MissionSaveData saveData;
+    // Data to persist
+    [Header("Data to update IN GAME")]
+    public bool hasBeenAccepted = false;
+    public Ship ship = null;
+    public int daysLeftToComplete;
 
-    public static string FOLDER_NAME = "MissionSaveData";
 
-    [Serializable]
-    public class MissionSaveData
+    public void ProcessOutcomes()
     {
-        public bool hasBeenAccepted = false;
-        public int daysLeftToComplete, numberOfCompletions;
-        public Ship ship = null;
+        foreach (MissionOutcome outcome in outcomes)
+        {
+            outcome.Process(this);
+        }
     }
-
-    public void SaveData()
-    {
-        DataModelsUtils.SaveFileAsync(name, FOLDER_NAME, saveData);
-    }
-
-    public async Task LoadDataAsync()
-    {
-        saveData = await DataModelsUtils.LoadFileAsync<MissionSaveData>(name, FOLDER_NAME);
-    }   
 
     public void ScheduleMission(Ship ship)
     {
-        Ship = ship;
+        this.ship = ship;
     }
 
     public void StartMission()
     {
-        saveData.daysLeftToComplete = missionDurationInDays;
+        daysLeftToComplete = missionDurationInDays;
     }
-
+    
     public bool IsInProgress()
     {
-        return saveData.daysLeftToComplete > 0;
-    }
-
-    private void ProcessOutcomes()
-    {
-        foreach (MissionOutcome outcome in outcomes)
-        {
-            if (outcome != null)
-            {
-                outcome.Process(this);
-            }
-        }
-    }
-
-    public void CompleteMission()
-    {
-        ProcessOutcomes();
-        Ship.DeductFuel();
-        Ship.IsLaunched = false;
-        Ship.CurrentMission = null;
-        Ship = null;
-
-        // Send a thank you email on first completion of the mission
-        if (thankYouMessage != null && NumberOfCompletions <= 0)
-        {
-            thankYouMessage.IsUnlocked = true; 
-        }
-        NumberOfCompletions++;
+        return daysLeftToComplete > 0;
     }
 }

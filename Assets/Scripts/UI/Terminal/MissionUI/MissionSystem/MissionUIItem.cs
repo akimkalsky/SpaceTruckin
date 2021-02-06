@@ -28,7 +28,7 @@ public class MissionUIItem : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
     public void Init(Mission mission, Transform scrollViewContent)
     {
         this.mission = mission;
-        missionNameText.text = mission.Name;
+        missionNameText.text = mission.missionName;
         this.scrollViewContent = scrollViewContent;
     }
 
@@ -69,9 +69,8 @@ public class MissionUIItem : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
 
                 if (slot.ship != null)
                 {
-                    slot.ship.CurrentMission = mission;
-                    //mission.Ship = slot.ship;
-                    mission.Ship = slot.ship;
+                    slot.ship.currentMission = mission;
+                    mission.ship = slot.ship;
                 }
                 else
                 {
@@ -101,10 +100,10 @@ public class MissionUIItem : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
     public void Unschedule()
     {
         myRectTransform.SetParent(scrollViewContent);
-        if(mission.Ship != null)
+        if(mission.ship != null)
         {
-            mission.Ship.CurrentMission = null;
-            mission.Ship = null;
+            mission.ship.currentMission = null;
+            mission.ship = null;
         }
     }
 

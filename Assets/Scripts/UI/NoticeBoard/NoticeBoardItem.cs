@@ -11,7 +11,7 @@ public class NoticeBoardItem : MonoBehaviour
     public void Init(Mission mission, Action<Mission> func)
     {
         this.mission = mission;
-        missionNameText.text = mission.Name;
+        missionNameText.text = mission.missionName;
 
         missionInfoButton.onClick.RemoveAllListeners();
         missionInfoButton.onClick.AddListener(() => func(mission));

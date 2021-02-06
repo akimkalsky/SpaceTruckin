@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class NoticeBoard : MonoBehaviour
@@ -36,7 +38,7 @@ public class NoticeBoard : MonoBehaviour
     {
         if(selectedMission != null)
         {
-            selectedMission.HasBeenAccepted = true;
+            selectedMission.hasBeenAccepted = true;
             CleanScrollView();
             PopulateScrollView();
             CleanDetailPane();
@@ -61,10 +63,10 @@ public class NoticeBoard : MonoBehaviour
 
     void PopulateScrollView()
     {
-        foreach(Mission mission in MissionsManager.Instance.Missions)
+        foreach(Mission mission in MissionsManager.Instance.missionContainer.missions)
         {
-            if(mission.MoneyNeededToUnlock <= PlayerManager.Instance.TotalMoneyAcquired
-                && !mission.HasBeenAccepted)
+            if(mission.moneyNeededToUnlock <= PlayerManager.Instance.playerData.playerTotalMoneyAcquired
+                && !mission.hasBeenAccepted)
             {
                 GameObject scrollItem = Instantiate(scrollItemPrefab, scrollViewContent.transform);
                 NoticeBoardItem noticeBoardItem = scrollItem.GetComponent<NoticeBoardItem>();
@@ -76,9 +78,9 @@ public class NoticeBoard : MonoBehaviour
     public void SelectItem(Mission missionToSelect)
     {
         selectedMission = missionToSelect;
-        jobNameText.text = selectedMission.Name;
-        customerNameText.text = selectedMission.Customer;
-        cargoText.text = selectedMission.Cargo;
-        rewardText.text = $"${selectedMission.Reward}";
+        jobNameText.text = selectedMission.missionName;
+        customerNameText.text = selectedMission.customer;
+        cargoText.text = selectedMission.cargo;
+        rewardText.text = $"${selectedMission.reward}";
     }
 }

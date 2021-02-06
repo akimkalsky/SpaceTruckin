@@ -76,7 +76,7 @@ public class PilotsUI : MonoBehaviour
 			{
 				GameObject crewItem = Instantiate(crewItemPrefab, scrollViewContent);
 				crewItem.GetComponent<Button>().AddOnClick(() => ShowPilotProfilePanel(pilot));
-				crewItem.GetComponentInChildren<Text>().text = pilot.Name;
+				crewItem.GetComponentInChildren<Text>().text = pilot.pilotName;
 			}
         }
 	}
@@ -92,17 +92,17 @@ public class PilotsUI : MonoBehaviour
 	private void ShowPilotProfilePanel(Pilot pilot)
 	{
 		SetPilotListVisibility(visible: false);
-		shipAvatar.sprite = pilot.Ship.Avatar;
-		pilotAvatar.sprite = pilot.Avatar;
+		shipAvatar.sprite = pilot.ship.shipAvatar;
+		pilotAvatar.sprite = pilot.avatar;
 		pilotDetailsText.text = BuildDetailsString(pilot);
 
 		// If the pilot doesn't already work for us, then set up a button to handle hiring him 
-		if (!pilot.IsHired)
+		if (!pilot.isHired)
         {
 			hireButton = GeneratePilotProfileButton(
 				hireButtonPrefab, PilotsConstants.hireButtonAnchors, () => HirePilot(pilot));
 		}
-		else if (pilot.IsHired && hireButton != null)
+		else if (pilot.isHired && hireButton != null)
         {
 			Destroy(hireButton.gameObject);
         }
@@ -168,27 +168,27 @@ public class PilotsUI : MonoBehaviour
 	private string BuildDetailsString(Pilot pilot)
 	{
 		StringBuilder builder = new StringBuilder();
-		builder.AppendLine("Name: " + pilot.Name);
-		builder.AppendLine("Ship: " + pilot.Ship.Name);
-		builder.AppendLine("Level: " + pilot.Level);
-		builder.AppendLine("Experience: " + pilot.Xp);
+		builder.AppendLine("Name: " + pilot.pilotName);
+		builder.AppendLine("Ship: " + pilot.ship.shipName);
+		builder.AppendLine("Level: " + pilot.level);
+		builder.AppendLine("Experience: " + pilot.xp);
 
-		if (string.IsNullOrEmpty(pilot.Description))
+		if (string.IsNullOrEmpty(pilot.description))
 		{
-			pilot.Description = PlaceholderUtils.GenerateLoremIpsum();
+			pilot.description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tortor dui, elementum eu convallis non, cursus ac dolor. Quisque dictum est quam, et pellentesque velit rutrum eget. Nullam interdum ultricies velit pharetra aliquet. Integer sodales a magna quis ornare. Ut vulputate nibh ipsum. Vivamus tincidunt nec nisi in fermentum. Mauris consequat mi vel odio consequat, eget gravida urna lobortis. Pellentesque eu ipsum consectetur, pharetra nulla in, consectetur turpis. Curabitur ornare eu nisi tempus varius. Phasellus vel ex mauris. Fusce fermentum mi id elementum gravida.";
 		}
 
-		builder.AppendLine("Description: " + pilot.Description);
-		builder.AppendLine("Missions completed: " + pilot.MissionsCompleted);
+		builder.AppendLine("Description: " + pilot.description);
+		builder.AppendLine("Missions completed: " + pilot.missionsCompleted);
 		return builder.ToString();
 	}
 
 	private void HirePilot(Pilot pilot)
     {
-		if (pilot != null && PlayerManager.Instance.CanSpendMoney(pilot.HireCost))
+		if (pilot != null && PlayerManager.Instance.CanSpendMoney(pilot.hireCost))
         {
-			PlayerManager.Instance.SpendMoney(pilot.HireCost);
-			PilotsManager.Instance.HirePilot(pilot);
+			PlayerManager.Instance.SpendMoney(pilot.hireCost);
+			PilotsManager.Instance.HirePilot(pilot.id);
 			hireButton.interactable = false;
 			hireButton.GetComponentInChildren<Text>().text = "Pilot Hired!";
 			PopulateScrollViews();

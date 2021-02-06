@@ -1,49 +1,35 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "Ship", menuName = "ScriptableObjects/Ship", order = 1)]
-public partial class Ship : ScriptableObject, IDataModel
+public class Ship : ScriptableObject
 {
     [Header("Set In Editor")]
+    public int id;
     public string shipName;
+
     public float maxHullIntegrity;
     public int maxFuel;
+
     public GameObject shipPrefab;
-    public Sprite shipAvatar;
+    public Sprite shipAvatar; 
     public Pilot pilot;
 
-    [Header("Data to update IN GAME")]
-    public ShipSaveData saveData;
+    [Header("Set at Runtime")]
+    public bool isOwned;
+    public bool isLaunched;
+    public HangarNode hangarNode;
+    public Mission currentMission;
 
-    public static string FOLDER_NAME = "ShipSaveData";
-
-    [Serializable]
-    public class ShipSaveData
-    {
-        [SerializeField] public bool isOwned, isLaunched;
-        [SerializeField] public int currentFuel;
-        [SerializeField] public float currenthullIntegrity;
-        [SerializeField] public HangarNode hangarNode;
-        [SerializeField] public Mission currentMission;
-    }
+    public int currentFuel;
+    public float currenthullIntegrity;
 
     public float GetHullPercent()
     {
-        return saveData.currenthullIntegrity / maxHullIntegrity;
+        return currenthullIntegrity / maxHullIntegrity;
     }
 
     public float GetFuelPercent()
     {
-        return (float)saveData.currentFuel / maxFuel;
-    }
-
-    public void SaveData()
-    {
-        DataModelsUtils.SaveFileAsync(name, FOLDER_NAME, saveData);
-    }
-
-    public async System.Threading.Tasks.Task LoadDataAsync()
-    {
-        saveData = await DataModelsUtils.LoadFileAsync<ShipSaveData>(name, FOLDER_NAME);
+        return (float) currentFuel / maxFuel;
     }
 }

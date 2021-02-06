@@ -1,13 +1,18 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class Indicator : MonoBehaviour
 {
-    private RepairsManager repairsManager;
+    public GameObject greenZone;
+
+    private Workstation workstation;
     private bool isInsideGreenZone; 
 
     private void Start()
     {
-        repairsManager = GetComponentInParent<RepairsManager>();
+        workstation = GetComponentInParent<Workstation>();
         Workstation.onRotationStopped += DetermineOutcome; 
     }
 
@@ -15,11 +20,11 @@ public class Indicator : MonoBehaviour
     {
         if (isInsideGreenZone)
         {
-            repairsManager.PlayerWins();
+            workstation.PlayerWins();
         }
         else
         {
-            repairsManager.PlayerLoses();
+            workstation.PlayerLoses();
         }
     }
 

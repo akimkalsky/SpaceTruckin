@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class BedCanvasUI : MonoBehaviour
@@ -47,11 +49,5 @@ public class BedCanvasUI : MonoBehaviour
     {
         MissionsManager.UpdateMissionSchedule();
         ShipsManager.UpdateHangarShips();
-
-        PlayerManager.Instance.SaveData();
-        MissionsManager.Instance.SaveData();
-        PilotsManager.Instance.SaveData();
-        ShipsManager.Instance.SaveData();
-        MessagesManager.Instance.SaveData();
     }
 }

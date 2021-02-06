@@ -14,8 +14,7 @@ public class GreenZone : MonoBehaviour
     // Call this to increase the difficulty 
     public void ReduceSize()
     {
-        transform.localScale += new Vector3(
-            -RepairsConstants.SizeDecrease, 0f, 0f); 
+        transform.localScale += new Vector3(-RepairsConstants.sizeDecrease, 0f, 0f); 
     }
 
     public void ResetSize()
